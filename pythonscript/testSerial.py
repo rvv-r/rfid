@@ -6,12 +6,12 @@ time.sleep(3)
 
 def getUID():
     ser.write(b'a')
-    arduinoData = ser.readline().decode('ascii')
+    dataPorte1 = ser.readline().decode('ascii')
     return dataPorte1
 
 def getSecteur1():
-    ser.write(b'a')
-    arduinoData = ser.readline().decode('ascii')
+    ser.write(b'b')
+    dataPorte2 = ser.readline().decode('ascii')
     return dataPorte2
 
 while (1):
