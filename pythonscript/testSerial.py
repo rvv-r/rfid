@@ -15,7 +15,7 @@ def getSecteur1():
     return dataPorte2
 
 while (1):
-    userInput = input('Sélection action')
+    userInput = input('Sélection action :')
 
     if userInput == 'd':
         print(getUID())

@@ -1417,17 +1417,18 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
  */
 
 
-
  /*PERSO: lit l'uid
  */
  void MFRC522::PICC_DumpUIDToSerial(Uid *uid	///< Pointer to Uid struct returned from a successful PICC_Select().
  									) {
  	// UID
  	for (byte i = 0; i < uid->size; i++) { // à tester sans if
- 		if(uid->uidByte[i] < 0x10)
+		/*
+		if(uid->uidByte[i] < 0x10) //en théorie ça enlève les espaces dans l'UID en output mais j'ai pas testé kek
  			Serial.print(F(" 0"));
  		else
  			Serial.print(F(" "));
+		*/
  		Serial.print(uid->uidByte[i], HEX);
  	}
  	Serial.println();
