@@ -40,8 +40,8 @@
 #define SS_PIN          10         // Configurable, see typical pin layout above
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
-char userInput;
 
+char userInput;		//input série
 MIFARE_Key keyA = {FF FF FF FF FF FF}; // Existe pas ?? surement faux
 
 void setup() {
