@@ -1632,8 +1632,8 @@ void MFRC522::PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to U
 		if (firstInGroup) {
 			// Print access bits
 			Serial.print(F(" [ "));
-			Serial.print((g[group] >> 2) & 1, DEC); Serial.print(F(" "));
-			Serial.print((g[group] >> 1) & 1, DEC); Serial.print(F(" "));
+			Serial.print((g[group] >> 2) & 1, DEC); // Serial.print(F(" "));
+			Serial.print((g[group] >> 1) & 1, DEC); // Serial.print(F(" "));
 			Serial.print((g[group] >> 0) & 1, DEC);
 			Serial.print(F(" ] "));
 			if (invertedError) {
