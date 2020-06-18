@@ -42,7 +42,23 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 
 char userInput;		//input série
-MIFARE_Key keyA = {FF FF FF FF FF FF}; // Existe pas ?? surement faux
+
+MFRC522::MIFARE_Key key0 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}}; // écriture des clés de chaque secteur
+MFRC522::MIFARE_Key key1 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key2 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key3 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key4 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key5 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key6 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key7 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key8 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key9 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key10 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key11 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key12 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key13 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key14 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key15 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 
 void setup() {
 	Serial.begin(9600);		// Initialize serial communications with the PC
@@ -70,14 +86,28 @@ void loop() {
   		return;
   	}
 
-    if (userInput == 'd'){
-  	  // Dump debug info about the card; PICC_HaltA() is automatically called
-  	  mfrc522.PICC_DumpUIDToSerial(&(mfrc522.uid));
-    }
+		switch (userInput){
+			case 'a':		//porteNiveau1
+				mfrc522.PICC_DumpUIDToSerial(&(mfrc522.uid));
 
-    if (userInput == 'g'){
-      // (uid, key, i)
-      mfrc522.PICC_DumpMifareClassicSectorToSerial(mfrc522.uid, keyA, 2);
-    }
-  }
+			case 'b': //porteNiveau2
+
+			case 'c': //porteNiveau3
+
+			case 'd': //porteNiveau4
+
+			case 'e': //hotelNiveau1
+
+			case 'f': //hotelNiveau2
+
+			case 'g': //hotelNiveau3
+
+			case 'h': //distributeurNiveau1
+
+			case 'i': //distributeurNiveau2
+
+			case 'j': //distributeurNiveau3
+
+  	}
+	}
 }

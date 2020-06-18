@@ -1423,12 +1423,12 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
  									) {
  	// UID
  	for (byte i = 0; i < uid->size; i++) { // à tester sans if
-		/*
+
 		if(uid->uidByte[i] < 0x10) //en théorie ça enlève les espaces dans l'UID en output mais j'ai pas testé kek
- 			Serial.print(F(" 0"));
- 		else
- 			Serial.print(F(" "));
-		*/
+ 			Serial.print(F("0"));
+ 		//else
+ 		//	Serial.print(F(" "));
+
  		Serial.print(uid->uidByte[i], HEX);
  	}
  	Serial.println();
@@ -1551,6 +1551,7 @@ void MFRC522::PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to U
 	for (int8_t blockOffset = no_of_blocks - 1; blockOffset >= 0; blockOffset--) {
 		blockAddr = firstBlock + blockOffset;
 		// Sector number - only on first line
+/*
 		if (isSectorTrailer) {
 			if(sector < 10)
 				Serial.print(F("   ")); // Pad with spaces
@@ -1573,12 +1574,13 @@ void MFRC522::PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to U
 		}
 		Serial.print(blockAddr);
 		Serial.print(F("  "));
+*/
 		// Establish encrypted communications before reading the first block
 		if (isSectorTrailer) {
 			status = PCD_Authenticate(PICC_CMD_MF_AUTH_KEY_A, firstBlock, key, uid);
 			if (status != STATUS_OK) {
-				Serial.print(F("PCD_Authenticate() failed: "));
-				Serial.println(GetStatusCodeName(status));
+				//Serial.print(F("PCD_Authenticate() failed: "));
+				//Serial.println(GetStatusCodeName(status));
 				return;
 			}
 		}
@@ -1586,20 +1588,20 @@ void MFRC522::PICC_DumpMifareClassicSectorToSerial(Uid *uid,			///< Pointer to U
 		byteCount = sizeof(buffer);
 		status = MIFARE_Read(blockAddr, buffer, &byteCount);
 		if (status != STATUS_OK) {
-			Serial.print(F("MIFARE_Read() failed: "));
-			Serial.println(GetStatusCodeName(status));
+			//Serial.print(F("MIFARE_Read() failed: "));
+			//Serial.println(GetStatusCodeName(status));
 			continue;
 		}
 		// Dump data
 		for (byte index = 0; index < 16; index++) {
-			if(buffer[index] < 0x10)
-				Serial.print(F(" 0"));
-			else
-				Serial.print(F(" "));
+			// if(buffer[index] < 0x10)
+			// 	Serial.print(F(" 0"));
+			// else
+			// 	Serial.print(F(" "));
 			Serial.print(buffer[index], HEX);
-			if ((index % 4) == 3) {
-				Serial.print(F(" "));
-			}
+			// if ((index % 4) == 3) {
+			// 	Serial.print(F(" "));
+			// }
 		}
 		// Parse sector trailer data
 		if (isSectorTrailer) {
