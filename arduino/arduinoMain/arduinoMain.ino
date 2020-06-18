@@ -60,6 +60,16 @@ MFRC522::MIFARE_Key key13 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 MFRC522::MIFARE_Key key14 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 MFRC522::MIFARE_Key key15 = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 
+byte sector1         = 1;
+byte blockAddr      = 4;
+// byte dataBlock[]    = {												juste si on veut l'écrire
+//   0x11, 0x12, 0x13, 0x14, //  1,  2,   3,  4,
+//   0x15, 0x16, 0x17, 0x18, //  5,  6,   7,  8,
+//   0x19, 0x1a, 0xff, 0x1b, //  9, 10, 255, 11,
+//   0x1c, 0x1d, 0x1e, 0x1f  // 12, 13, 14, 15
+// };
+byte trailerBlock   = 7;
+
 void setup() {
 	Serial.begin(9600);		// Initialize serial communications with the PC
 	while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
@@ -91,23 +101,51 @@ void loop() {
 				mfrc522.PICC_DumpUIDToSerial(&(mfrc522.uid));
 
 			case 'b': //porteNiveau2
+				byte sector         = 1;
+				byte blockAddr      = 4;
+				byte trailerBlock   = 7;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1, sector);
 
 			case 'c': //porteNiveau3
+				byte sector1         = 2;
+				byte blockAddr      = 8;
+				byte trailerBlock   = 11;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key2, sector);
 
 			case 'd': //porteNiveau4
+				byte sector1         = 3;
+				byte blockAddr      = 12;
+				byte trailerBlock   = 15;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key3, sector);
 
 			case 'e': //hotelNiveau1
+				byte sector1         = 4;
+				byte blockAddr      = 16;
+				byte trailerBlock   = 19;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key4, sector);
 
 			case 'f': //hotelNiveau2
+				byte sector1         = 5;
+				byte blockAddr      = 20;
+				byte trailerBlock   = 23;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key5, sector);
 
 			case 'g': //hotelNiveau3
+				byte sector1         = 5;
+				byte blockAddr      = 20;
+				byte trailerBlock   = 23;
+				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key6, sector);
 
 			case 'h': //distributeurNiveau1
 
 			case 'i': //distributeurNiveau2
+			dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+			dump_byte_array(dataBlock, 16); Serial.println();
+			status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(blockAddr, dataBlock, 16); //on écrit le nouveau solde au lieu de le décrémenter
 
 			case 'j': //distributeurNiveau3
 
+			default: return;
   	}
 	}
 }
