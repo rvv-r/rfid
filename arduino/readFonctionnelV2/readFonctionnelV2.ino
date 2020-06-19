@@ -51,7 +51,7 @@ void setup() {
     Serial.println(F("Using for key A :"));
     dump_byte_array(key1A.keyByte, MFRC522::MF_KEY_SIZE);
     Serial.println();
-    
+
     Serial.println(F("Using for key B :"));
     dump_byte_array(key1B.keyByte, MFRC522::MF_KEY_SIZE);
     Serial.println();
@@ -62,77 +62,8 @@ void setup() {
  * Main loop.
  */
 void loop() {
-    // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-    if ( ! mfrc522.PICC_IsNewCardPresent())
-        return;
 
-    // Select one of the cards
-    if ( ! mfrc522.PICC_ReadCardSerial())
-        return;
-
-    // Show some details of the PICC (that is: the tag/card)
-    Serial.println(F("Card UID:"));
-    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
-    Serial.println();
-    // Serial.print(F("PICC type: "));
-    MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-    Serial.println(mfrc522.PICC_GetTypeName(piccType));
-
-    // Check for compatibility
-    if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
-        &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
-        &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-        Serial.println(F("This sample only works with MIFARE Classic cards."));
-        return;
-    }
-
-    // In this sample we use the second sector,
-    // that is: sector #sector, covering block #blockAddr up to and including block #trailerBlock
-    byte sector         = 1;
-    byte blockAddr      = 5;
-    MFRC522::StatusCode status;
-    byte buffer[18];
-    byte size = sizeof(buffer);
-
-
-    // Authenticate using key A
-    // Serial.println(F("Authenticating using key A..."));
-    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid));
-    if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("PCD_Authenticate() failed for keyA: "));
-        Serial.println(mfrc522.GetStatusCodeName(status));
-        return;
-    }
-    
-    // Authenticate using key B
-    //  Serial.println(F("Authenticating using key B..."));
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid));
-      if (status != MFRC522::STATUS_OK) {
-          Serial.print(F("PCD_Authenticate() failed for keyB: "));
-          Serial.println(mfrc522.GetStatusCodeName(status));
-          return;
-      }
-  
-    // Show the whole sector as it currently is
-    // Serial.print(F("Current data in sector ")); Serial.print(sector); Serial.println(F(" : "));
-    // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1A, sector);
-    // Serial.println();
-
-    // Read data from the block
-    Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-    status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size);
-    if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("MIFARE_Read() failed: "));
-        Serial.println(mfrc522.GetStatusCodeName(status));
-    }
-    dump_byte_array(buffer, 16); Serial.println();
-    Serial.println();
-
-
-    mfrc522.PICC_HaltA(); // Halt PICC
-    mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
-
-    readBlock();
+    readBlock(1, 5);
 }
 
 /**
@@ -148,7 +79,8 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 /**
  * Helper routine to dump a byte array as hex values to Serial.
  */
-void readBlock(byte sector, byte bufferSize) {
+void readBlock( byte sector,
+                byte blockAddr) {
 
 // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
     if ( ! mfrc522.PICC_IsNewCardPresent())
@@ -159,30 +91,26 @@ void readBlock(byte sector, byte bufferSize) {
         return;
 
     // Show some details of the PICC (that is: the tag/card)
-    Serial.println(F("Card UID:"));
-    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+    // Serial.println(F("Card UID:"));
+    //dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
     Serial.println();
     // Serial.print(F("PICC type: "));
     MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-    Serial.println(mfrc522.PICC_GetTypeName(piccType));
+    // Serial.println(mfrc522.PICC_GetTypeName(piccType));
 
     // Check for compatibility
     if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
         &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
         &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-        Serial.println(F("This sample only works with MIFARE Classic cards."));
+        // Serial.println(F("This sample only works with MIFARE Classic cards."));
         return;
     }
 
-    // In this sample we use the second sector,
     // that is: sector #sector, covering block #blockAddr up to and including block #trailerBlock
-    byte sector         = 1;
-    byte blockAddr      = 5;
     byte trailerBlock   = ((sector+1)*4)-1;
     MFRC522::StatusCode status;
     byte buffer[18];
     byte size = sizeof(buffer);
-
 
     // Authenticate using key A
     // Serial.println(F("Authenticating using key A..."));
@@ -192,7 +120,7 @@ void readBlock(byte sector, byte bufferSize) {
         Serial.println(mfrc522.GetStatusCodeName(status));
         return;
     }
-    
+
     // Authenticate using key B
     //  Serial.println(F("Authenticating using key B..."));
       status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid));
@@ -201,7 +129,7 @@ void readBlock(byte sector, byte bufferSize) {
           Serial.println(mfrc522.GetStatusCodeName(status));
           return;
       }
-  
+
     // Show the whole sector as it currently is
     // Serial.print(F("Current data in sector ")); Serial.print(sector); Serial.println(F(" : "));
     // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1A, sector);
@@ -216,7 +144,6 @@ void readBlock(byte sector, byte bufferSize) {
     }
     dump_byte_array(buffer, 16); Serial.println();
     Serial.println();
-
 
     mfrc522.PICC_HaltA(); // Halt PICC
     mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD

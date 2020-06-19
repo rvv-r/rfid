@@ -117,11 +117,14 @@ void loop() {
   		return;
   	}
 
-
 		switch (userInput){
 			case 'a':		//porteNiveau1
-				mfrc522.PICC_DumpUIDToSerial(&(mfrc522.uid));
+			    // Show some details of the PICC (that is: the tag/card)
+			    Serial.println(F("Card UID:"));
+			    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+			    Serial.println();
 
+					
 			case 'b': //porteNiveau2
 				byte sector         = 1;
 				byte blockAddr      = 4;
