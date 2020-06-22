@@ -63,7 +63,7 @@ void setup() {
  */
 void loop() {
 
-    readBlock(1, 5);
+    readBlock(1, 5, &key1A, &key1B);
 }
 
 /**
@@ -80,7 +80,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
  * Helper routine to dump a byte array as hex values to Serial.
  */
 void readBlock( byte sector,
-                byte blockAddr) {
+                byte blockAddr,
+                MIFARE_Key *keyA,
+                MIFARE_Key *keyB) {
 
 // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
     if ( ! mfrc522.PICC_IsNewCardPresent())
@@ -114,7 +116,7 @@ void readBlock( byte sector,
 
     // Authenticate using key A
     // Serial.println(F("Authenticating using key A..."));
-    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid));
+    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &keyA, &(mfrc522.uid));
     if (status != MFRC522::STATUS_OK) {
         Serial.print(F("PCD_Authenticate() failed for keyA: "));
         Serial.println(mfrc522.GetStatusCodeName(status));
@@ -123,7 +125,7 @@ void readBlock( byte sector,
 
     // Authenticate using key B
     //  Serial.println(F("Authenticating using key B..."));
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid));
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &keyB, &(mfrc522.uid));
       if (status != MFRC522::STATUS_OK) {
           Serial.print(F("PCD_Authenticate() failed for keyB: "));
           Serial.println(mfrc522.GetStatusCodeName(status));
