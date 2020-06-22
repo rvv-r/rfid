@@ -44,8 +44,11 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 MFRC522::MIFARE_Key key0A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}}; // écriture des clés de chaque secteur
 MFRC522::MIFARE_Key key0B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}}; // écriture des clés de chaque secteur
 
-MFRC522::MIFARE_Key key1A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-MFRC522::MIFARE_Key key1B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key1A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key1B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+//MFRC522::MIFARE_Key key1A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+//MFRC522::MIFARE_Key key1B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 
 MFRC522::MIFARE_Key key2A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
 MFRC522::MIFARE_Key key2B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
@@ -107,71 +110,141 @@ void loop() {
 
     userInput=Serial.read();
 
-  	// Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  	if ( ! mfrc522.PICC_IsNewCardPresent()) {
-  		return;
-  	}
-
-  	// Select one of the cards
-  	if ( ! mfrc522.PICC_ReadCardSerial()) {
-  		return;
-  	}
-
 		switch (userInput){
 			case 'a':		//porteNiveau1
-			    // Show some details of the PICC (that is: the tag/card)
-			    Serial.println(F("Card UID:"));
-			    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
-			    Serial.println();
+        if ( ! mfrc522.PICC_IsNewCardPresent()) {
+          return;
+        }
 
-					
+        if ( ! mfrc522.PICC_ReadCardSerial()) {
+          return;
+        }
+		    Serial.println(F("Card UID:")); 		    // Show some details of the PICC (that is: the tag/card)
+		    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+		    // Serial.println();
+				// break;
+
 			case 'b': //porteNiveau2
-				byte sector         = 1;
-				byte blockAddr      = 4;
-				byte trailerBlock   = 7;
-
-
+				readBlock(1, 5);
 
 			case 'c': //porteNiveau3
-				byte sector1         = 2;
-				byte blockAddr      = 8;
-				byte trailerBlock   = 11;
-				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key2, sector);
+				readBlock(2, 8);
+				break;
 
 			case 'd': //porteNiveau4
-				byte sector1         = 3;
-				byte blockAddr      = 12;
-				byte trailerBlock   = 15;
-				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key3, sector);
+				readBlock(3, 11);
+				break;
 
 			case 'e': //hotelNiveau1
-				byte sector1         = 4;
-				byte blockAddr      = 16;
-				byte trailerBlock   = 19;
-				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key4, sector);
+				readBlock(4, 15);
+				break;
 
 			case 'f': //hotelNiveau2
-				byte sector1         = 5;
-				byte blockAddr      = 20;
-				byte trailerBlock   = 23;
-				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key5, sector);
+				readBlock(5, 19);
+				break;
 
 			case 'g': //hotelNiveau3
-				byte sector1         = 5;
-				byte blockAddr      = 20;
-				byte trailerBlock   = 23;
-				mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key6, sector);
+				readBlock(6, 23);
+				break;
 
 			case 'h': //distributeurNiveau1
+				readBlock(7, 27);
+				break;
 
 			case 'i': //distributeurNiveau2
-			dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
-			dump_byte_array(dataBlock, 16); Serial.println();
-			status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(blockAddr, dataBlock, 16); //on écrit le nouveau solde au lieu de le décrémenter
+				readBlock(8, 31);
+				break;
+			// dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+			// dump_byte_array(dataBlock, 16); Serial.println();
+			// status = (MFRC522::StatusCode) mfrc522.MIFARE_Write(blockAddr, dataBlock, 16); //on écrit le nouveau solde au lieu de le décrémenter
 
 			case 'j': //distributeurNiveau3
+				break;
 
 			default: return;
   	}
 	}
+}
+
+/**
+ * Helper routine to dump a byte array as hex values to Serial.
+ */
+void dump_byte_array(byte *buffer, byte bufferSize) {
+    for (byte i = 0; i < bufferSize; i++) {
+        Serial.print(buffer[i] < 0x10 ? "0" : "");
+        Serial.print(buffer[i], HEX);
+    }
+}
+
+/**
+ * Helper routine to dump a byte array as hex values to Serial.
+ */
+void readBlock( byte sector,
+                byte blockAddr) {
+
+// Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+    if ( ! mfrc522.PICC_IsNewCardPresent())
+        return;
+
+    // Select one of the cards
+    if ( ! mfrc522.PICC_ReadCardSerial())
+        return;
+
+    // Show some details of the PICC (that is: the tag/card)
+    // Serial.println(F("Card UID:"));
+    //dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+    Serial.println();
+    Serial.print(F("PICC type: "));
+    MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
+    Serial.println(mfrc522.PICC_GetTypeName(piccType));
+
+    // Check for compatibility
+    if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
+        &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
+        &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
+        Serial.println(F("This sample only works with MIFARE Classic cards."));
+        return;
+    }
+
+    // that is: sector #sector, covering block #blockAddr up to and including block #trailerBlock
+    byte trailerBlock   = ((sector+1)*4)-1;
+    MFRC522::StatusCode status;
+    byte buffer[18];
+    byte size = sizeof(buffer);
+
+    // Authenticate using key A
+    Serial.println(F("Authenticating using key A..."));
+    status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid));
+    if (status != MFRC522::STATUS_OK) {
+        Serial.print(F("PCD_Authenticate() failed for keyA: "));
+        Serial.println(mfrc522.GetStatusCodeName(status));
+        return;
+    }
+
+    // Authenticate using key B
+    Serial.println(F("Authenticating using key B..."));
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          Serial.print(F("PCD_Authenticate() failed for keyB: "));
+          Serial.println(mfrc522.GetStatusCodeName(status));
+          return;
+      }
+
+    // Show the whole sector as it currently is
+    Serial.print(F("Current data in sector ")); Serial.print(sector); Serial.println(F(" : "));
+    mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1A, sector);
+    Serial.println();
+
+    // Read data from the block
+    Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
+    status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size);
+    if (status != MFRC522::STATUS_OK) {
+        Serial.print(F("MIFARE_Read() failed: "));
+        Serial.println(mfrc522.GetStatusCodeName(status));
+    }
+    dump_byte_array(buffer, 16); Serial.println();
+    Serial.println();
+
+    mfrc522.PICC_HaltA(); // Halt PICC
+    mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
 }
