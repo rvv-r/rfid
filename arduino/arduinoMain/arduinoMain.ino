@@ -112,6 +112,7 @@ void loop() {
 
 		switch (userInput){
 			case 'a':		//porteNiveau1
+<<<<<<< HEAD
         if ( ! mfrc522.PICC_IsNewCardPresent()) {
           return;
         }
@@ -126,12 +127,33 @@ void loop() {
 
 			case 'b': //porteNiveau2
 				readBlock(1, 5);
+=======
+        // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+            if ( ! mfrc522.PICC_IsNewCardPresent()) {
+              return;
+            }
+    
+        // Select one of the cards
+            if ( ! mfrc522.PICC_ReadCardSerial()) {
+              return;
+            }
+		    // Show some details of the PICC (that is: the tag/card)
+		    Serial.println(F("Card UID:"));
+		    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+		    // Serial.println();
+				break;
+
+			case 'b': //porteNiveau2
+				readBlock(1, 5);
+				break;
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
 
 			case 'c': //porteNiveau3
 				readBlock(2, 8);
 				break;
 
 			case 'd': //porteNiveau4
+<<<<<<< HEAD
 				readBlock(3, 11);
 				break;
 
@@ -153,6 +175,29 @@ void loop() {
 
 			case 'i': //distributeurNiveau2
 				readBlock(8, 31);
+=======
+				readBlock(3, 12);
+				break;
+
+			case 'e': //hotelNiveau1
+				readBlock(4, 16);
+				break;
+
+			case 'f': //hotelNiveau2
+				readBlock(5, 20);
+				break;
+
+			case 'g': //hotelNiveau3
+				readBlock(6, 24);
+				break;
+
+			case 'h': //distributeurNiveau1
+				readBlock(7, 28);
+				break;
+
+			case 'i': //distributeurNiveau2
+			// readBlock(8, 32);
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
 				break;
 			// dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
 			// dump_byte_array(dataBlock, 16); Serial.println();
@@ -194,15 +239,25 @@ void readBlock( byte sector,
     // Serial.println(F("Card UID:"));
     //dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
     Serial.println();
+<<<<<<< HEAD
     Serial.print(F("PICC type: "));
     MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
     Serial.println(mfrc522.PICC_GetTypeName(piccType));
+=======
+    // Serial.print(F("PICC type: "));
+    MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
+    // Serial.println(mfrc522.PICC_GetTypeName(piccType));
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
 
     // Check for compatibility
     if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
         &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
         &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
+<<<<<<< HEAD
         Serial.println(F("This sample only works with MIFARE Classic cards."));
+=======
+        // Serial.println(F("This sample only works with MIFARE Classic cards."));
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
         return;
     }
 
@@ -213,7 +268,11 @@ void readBlock( byte sector,
     byte size = sizeof(buffer);
 
     // Authenticate using key A
+<<<<<<< HEAD
     Serial.println(F("Authenticating using key A..."));
+=======
+    // Serial.println(F("Authenticating using key A..."));
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
     status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid));
     if (status != MFRC522::STATUS_OK) {
         Serial.print(F("PCD_Authenticate() failed for keyA: "));
@@ -222,7 +281,11 @@ void readBlock( byte sector,
     }
 
     // Authenticate using key B
+<<<<<<< HEAD
     Serial.println(F("Authenticating using key B..."));
+=======
+    //  Serial.println(F("Authenticating using key B..."));
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
       status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid));
       if (status != MFRC522::STATUS_OK) {
           Serial.print(F("PCD_Authenticate() failed for keyB: "));
@@ -231,9 +294,15 @@ void readBlock( byte sector,
       }
 
     // Show the whole sector as it currently is
+<<<<<<< HEAD
     Serial.print(F("Current data in sector ")); Serial.print(sector); Serial.println(F(" : "));
     mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1A, sector);
     Serial.println();
+=======
+    // Serial.print(F("Current data in sector ")); Serial.print(sector); Serial.println(F(" : "));
+    // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key1A, sector);
+    // Serial.println();
+>>>>>>> b394495095ec58ea22107cf80630b09a30a4b7a0
 
     // Read data from the block
     Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
