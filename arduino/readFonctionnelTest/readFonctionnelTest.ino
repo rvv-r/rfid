@@ -70,14 +70,6 @@ void readBlock( byte sector,
                 byte blockAddr) {
 
   MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-  // Serial.println(mfrc522.PICC_GetTypeName(piccType));
-
-  // if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
-  //         &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
-  //         &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-  //   // Serial.println(F("This sample only works with MIFARE Classic cards."));
-  //   return;
-  // }
 
   byte trailerBlock   = ((sector + 1) * 4) - 1;
   MFRC522::StatusCode status;
@@ -114,6 +106,6 @@ void readBlock( byte sector,
   dump_byte_array(buffer, 16); Serial.println();
   Serial.println();
 
-  mfrc522.PICC_HaltA(); // Halt PICC
+  // mfrc522.PICC_HaltA(); // Halt PICC
   mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
 }
