@@ -56,8 +56,6 @@ void setup() {
     Serial.print(F("Using key (for A and B):"));
     dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
     Serial.println();
-
-    Serial.println(F("BEWARE: Data will be written to the PICC, in sector #1"));
 }
 
 /**
@@ -72,27 +70,20 @@ void loop() {
     if ( ! mfrc522.PICC_ReadCardSerial())
         return;
 
-    // Show some details of the PICC (that is: the tag/card)
-    Serial.print(F("Card UID:"));
-    dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
-    Serial.println();
-    Serial.print(F("PICC type: "));
-    MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-    Serial.println(mfrc522.PICC_GetTypeName(piccType));
-
-    // Check for compatibility
-    if (    piccType != MFRC522::PICC_TYPE_MIFARE_MINI
-        &&  piccType != MFRC522::PICC_TYPE_MIFARE_1K
-        &&  piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-        Serial.println(F("This sample only works with MIFARE Classic cards."));
-        return;
-    }
+    // // Show some details of the PICC (that is: the tag/card)
+    // Serial.print(F("Card UID:"));
+    // dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
+    // Serial.println();
+    // Serial.print(F("PICC type: "));
+    // MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
+    // Serial.println(mfrc522.PICC_GetTypeName(piccType));
 
     // In this sample we use the second sector,
     // that is: sector #1, covering block #4 up to and including block #7
     byte sector         = 1;
-    byte valueBlockB    = 6;
+    byte ValueBlock    = 6;
     byte trailerBlock   = 7;
+    int32_t itemPrice = 1; // Evian = 1€
     MFRC522::StatusCode status;
     byte buffer[18];
     byte size = sizeof(buffer);
@@ -107,10 +98,13 @@ void loop() {
         return;
     }
 
-    // Show the whole sector as it currently is
-    Serial.println(F("Current data in sector:"));
-    mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
-    Serial.println();
+    // // Show the whole sector as it currently is
+    // Serial.println(F("Current data in sector:"));
+    // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
+    // Serial.println();
+
+    status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+    Serial.print("Solde avant : "); Serial.println(value);
 
     // We need a sector trailer that defines blocks 5 and 6 as Value Blocks and enables key B
     // The last block in a sector (block #3 for Mifare Classic 1K) is the Sector Trailer.
@@ -187,61 +181,45 @@ void loop() {
 
     // A value block has a 32 bit signed value stored three times
     // and an 8 bit address stored 4 times. Make sure that valueBlockA
-    // and valueBlockB have that format (note that it will only format
+    // and ValueBlock have that format (note that it will only format
     // the block when it doesn't comply to the expected format already).
 
-    formatValueBlock(valueBlockB); // à commenter après les tests
+    formatValueBlock(ValueBlock); // à commenter après les tests
 
-    // Decrement 10 from the value of valueBlockB and store the result in valueBlockB.
+    // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
 
-    if (value>=40){
+    if (value>=0 && value>itemPrice){
 
-      Serial.print("Soustrait prix boisson (1€) du bloc "); Serial.println(valueBlockB);
-      status = mfrc522.MIFARE_Decrement(valueBlockB, 1);
+      Serial.print("Soustrait prix boisson (1€) du bloc "); Serial.println(ValueBlock);
+      status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
       if (status != MFRC522::STATUS_OK) {
           Serial.print(F("MIFARE_Decrement() failed: "));
           Serial.println(mfrc522.GetStatusCodeName(status));
           return;
       }
 
-      status = mfrc522.MIFARE_Transfer(valueBlockB);
+      status = mfrc522.MIFARE_Transfer(ValueBlock);
       if (status != MFRC522::STATUS_OK) {
           Serial.print(F("MIFARE_Transfer() failed: "));
           Serial.println(mfrc522.GetStatusCodeName(status));
           return;
       }
+
+      // Show the new value of ValueBlock
+      status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+      if (status != MFRC522::STATUS_OK) {
+          Serial.print(F("mifare_GetValue() failed: "));
+          Serial.println(mfrc522.GetStatusCodeName(status));
+          return;
+      }
+      // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
+      Serial.print(F("Solde après dans le bloc ")); Serial.print(ValueBlock);
+      Serial.print(F(" = ")); Serial.println(value);
     }
 
     else{
       Serial.println("Solde insuffisant");
     }
-
-    // Show the new value of valueBlockB
-    status = mfrc522.MIFARE_GetValue(valueBlockB, &value);
-    if (status != MFRC522::STATUS_OK) {
-        Serial.print(F("mifare_GetValue() failed: "));
-        Serial.println(mfrc522.GetStatusCodeName(status));
-        return;
-    }
-    // status = mfrc522.MIFARE_SetValue(valueBlockB, 100);
-    Serial.print(F("Solde disponible dans le bloc ")); Serial.print(valueBlockB);
-    Serial.print(F(" = ")); Serial.println(value);
-
-
-    // // Check some boundary...
-    // if (value <= -100) {
-    //     Serial.println(F("Below -100, so resetting it to 255 = 0xFF just for fun..."));
-    //     status = mfrc522.MIFARE_SetValue(valueBlockB, 255);
-    //     if (status != MFRC522::STATUS_OK) {
-    //         Serial.print(F("mifare_SetValue() failed: "));
-    //         Serial.println(mfrc522.GetStatusCodeName(status));
-    //         return;
-    //     }
-    // }
-    //
-    // else if (value >0){
-    //   Serial.println("niveau suivant");
-    // }
 
     // Dump the sector data
     mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
