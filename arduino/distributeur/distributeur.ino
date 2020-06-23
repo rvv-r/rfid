@@ -1,33 +1,3 @@
-/**
- * ----------------------------------------------------------------------------
- * This is a MFRC522 library example; see https://github.com/miguelbalboa/rfid
- * for further details and other examples.
- *
- * NOTE: The library file MFRC522.h has a lot of useful info. Please read it.
- *
- * Released into the public domain.
- * ----------------------------------------------------------------------------
- * This sample shows how to setup blocks on a MIFARE Classic PICC (= card/tag)
- * to be in "Value Block" mode: in this mode the operations Increment/Decrement,
- * Restore and Transfer can be used.
- *
- * BEWARE: Data will be written to the PICC, in sector #1 (blocks #4 to #7).
- *
- *
- * Typical pin layout used:
- * -----------------------------------------------------------------------------------------
- *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
- *             Reader/PCD   Uno/101       Mega      Nano v3    Leonardo/Micro   Pro Micro
- * Signal      Pin          Pin           Pin       Pin        Pin              Pin
- * -----------------------------------------------------------------------------------------
- * RST/Reset   RST          9             5         D9         RESET/ICSP-5     RST
- * SPI SS      SDA(SS)      10            53        D10        10               10
- * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
- * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14
- * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15
- *
- */
-
 #include <SPI.h>
 #include <MFRC522.h>
 
@@ -36,7 +6,7 @@
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
-MFRC522::MIFARE_Key key;
+MFRC522::MIFARE_Key key = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
 /**
  * Initialize.
@@ -47,15 +17,8 @@ void setup() {
     SPI.begin();		// Init SPI bus
     mfrc522.PCD_Init();	// Init MFRC522 card
 
-    // Prepare the key (used both as key A and as key B)
-    // using FFFFFFFFFFFFh which is the default at chip delivery from the factory
-    for (byte i = 0; i < 6; i++) {
-        key.keyByte[i] = 0xFF;
-    }
-
     Serial.print(F("Using key (for A and B):"));
-    dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
-    Serial.println();
+    dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE); Serial.println();
 }
 
 /**
@@ -98,11 +61,6 @@ void loop() {
         return;
     }
 
-    // // Show the whole sector as it currently is
-    // Serial.println(F("Current data in sector:"));
-    // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key, sector);
-    // Serial.println();
-
     status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
     Serial.print("Solde avant : "); Serial.println(value);
 
@@ -114,10 +72,10 @@ void loop() {
     //      Bytes 9:     User data
     //      Bytes 10-15: Key B (or user data)
     byte trailerBuffer[] = {
-        255, 255, 255, 255, 255, 255,       // Keep default key A
+        255, 255, 255, 255, 255, 255,       // Keep default key A, à remplacer par la vraie valeur
         0, 0, 0,
         0,
-        255, 255, 255, 255, 255, 255};      // Keep default key B
+        255, 255, 255, 255, 255, 255};      // Keep default key B, à remplacer par la vraie valeur
     // The access bits are stored in a peculiar fashion.
     // There are four groups:
     //      g[0]    Access bits for block 0 (for sectors 0-31)
@@ -155,20 +113,20 @@ void loop() {
         Serial.println(mfrc522.GetStatusCodeName(status));
         return;
     }
-    // Check if it matches the desired access pattern already;
-    // because if it does, we don't need to write it again...
-    if (    buffer[6] != trailerBuffer[6]
-        ||  buffer[7] != trailerBuffer[7]
-        ||  buffer[8] != trailerBuffer[8]) {
-        // They don't match (yet), so write it to the PICC
-        Serial.println(F("Writing new sector trailer..."));
-        status = mfrc522.MIFARE_Write(trailerBlock, trailerBuffer, 16);
-        if (status != MFRC522::STATUS_OK) {
-            Serial.print(F("MIFARE_Write() failed: "));
-            Serial.println(mfrc522.GetStatusCodeName(status));
-            return;
-        }
-    } // à commenter après les tests
+    // // Check if it matches the desired access pattern already;
+    // // because if it does, we don't need to write it again...
+    // if (    buffer[6] != trailerBuffer[6]
+    //     ||  buffer[7] != trailerBuffer[7]
+    //     ||  buffer[8] != trailerBuffer[8]) {
+    //     // They don't match (yet), so write it to the PICC
+    //     Serial.println(F("Writing new sector trailer..."));
+    //     status = mfrc522.MIFARE_Write(trailerBlock, trailerBuffer, 16);
+    //     if (status != MFRC522::STATUS_OK) {
+    //         Serial.print(F("MIFARE_Write() failed: "));
+    //         Serial.println(mfrc522.GetStatusCodeName(status));
+    //         return;
+    //     }
+    // } // à commenter après les tests
 
     // Authenticate using key B
     Serial.println(F("Authenticating again using key B..."));
