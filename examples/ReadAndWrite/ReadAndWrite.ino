@@ -90,15 +90,15 @@ void loop() {
 
     // In this sample we use the second sector,
     // that is: sector #1, covering block #4 up to and including block #7
-    byte sector         = 1;
-    byte blockAddr      = 4;
+    byte sector         = 2;
+    byte blockAddr      = 8;
     byte dataBlock[]    = {
         0x01, 0x02, 0x03, 0x04, //  1,  2,   3,  4,
         0x05, 0x06, 0x07, 0x08, //  5,  6,   7,  8,
         0x09, 0x0a, 0xff, 0x0b, //  9, 10, 255, 11,
         0x0c, 0x0d, 0x0e, 0x0f  // 12, 13, 14, 15
     };
-    byte trailerBlock   = 7;
+    byte trailerBlock   = 11;
     MFRC522::StatusCode status;
     byte buffer[18];
     byte size = sizeof(buffer);
