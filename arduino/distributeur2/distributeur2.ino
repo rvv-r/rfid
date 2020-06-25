@@ -68,8 +68,8 @@ void loop() {
     // Decrement itemPrice from the value of ValueBlock and store the result in ValueBlock.
     if (value>=0 && value>itemPrice){
       Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-      Serial.print(F("Nouveau solde : ")); Serial.print(value); Serial.println("€");
       Serial.println("Obtenu : Coca");
+      Serial.print(F("Calcul du nouveau solde : ")); Serial.print(value-itemPrice); Serial.println("€");
       Serial.println();
 
       delay(200);
@@ -86,6 +86,7 @@ void loop() {
 
       // Show the new value of ValueBlock
       status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+      Serial.print(F("Nouveau solde : ")); Serial.print(value); Serial.println("€");
       if (status != MFRC522::STATUS_OK) {
           return;
       }
