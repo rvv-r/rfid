@@ -12,47 +12,47 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 MFRC522::MIFARE_Key key1A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 MFRC522::MIFARE_Key key1B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
-// MFRC522::MIFARE_Key key2A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key2B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key3A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key3B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key4A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key4B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key5A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key5B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key6A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key6B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key7A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key7B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key8A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key8B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key9A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key9B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key10A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key10B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key11A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key11B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key12A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key12B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key13A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key13B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key14A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key14B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-//
-// MFRC522::MIFARE_Key key15A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
-// MFRC522::MIFARE_Key key15B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key2A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key2B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key3A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key3B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key4A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key4B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key5A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key5B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key6A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key6B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key7A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key7B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key8A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key8B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key9A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key9B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key10A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key10B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key11A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key11B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key12A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key12B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key13A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key13B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key14A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key14B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+
+MFRC522::MIFARE_Key key15A = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key15B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
 char userInput;
 
@@ -87,13 +87,13 @@ void loop() {
     if ( ! mfrc522.PICC_ReadCardSerial())
       return;
 
-    if (userInput=='a'){  // porteNiveau1
+    if (userInput=='a'){  // porteNiveau1 Secteur 0
       Serial.println(F("Card UID:"));
       dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
     }
 
 
-    if (userInput=='b'){  // porteNiveau2
+    else if (userInput=='b'){  // porteNiveau2 Secteur 1
       byte sector = 1;
       byte blockAddr = 4;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -123,7 +123,7 @@ void loop() {
       }
 
 
-    else if (userInput=='c'){ // porteNiveau3
+    else if (userInput=='c'){ // porteNiveau3 Secteur 2
       byte sector = 2;
       byte blockAddr = 9;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -131,12 +131,12 @@ void loop() {
       byte buffer[18];
       byte size = sizeof(buffer);
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid)); // Authenticate using key A
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key2A, &(mfrc522.uid)); // Authenticate using key A
       if (status != MFRC522::STATUS_OK) {
         return;
       }
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid)); // Authenticate using key B
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key2B, &(mfrc522.uid)); // Authenticate using key B
       if (status != MFRC522::STATUS_OK) {
         return;
       }
@@ -153,7 +153,7 @@ void loop() {
     }
 
 
-    else if (userInput=='d'){ // porteNiveau4
+    else if (userInput=='d'){ // porteNiveau4 Secteur 3
       byte sector = 2;
       byte blockAddr = 9;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -161,12 +161,12 @@ void loop() {
       byte buffer[18];
       byte size = sizeof(buffer);
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid)); // Authenticate using key A
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key3A, &(mfrc522.uid)); // Authenticate using key A
       if (status != MFRC522::STATUS_OK) {
         return;
       }
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid)); // Authenticate using key B
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key3B, &(mfrc522.uid)); // Authenticate using key B
       if (status != MFRC522::STATUS_OK) {
         return;
       }
@@ -183,7 +183,7 @@ void loop() {
     }
 
 
-    else if (userInput=='e'){ // hotelNiveau1
+    else if (userInput=='e'){ // hotelNiveau1 Secteur 4
       byte sector = 2;
       byte blockAddr = 9;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -191,12 +191,12 @@ void loop() {
       byte buffer[18];
       byte size = sizeof(buffer);
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid)); // Authenticate using key A
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key4A, &(mfrc522.uid)); // Authenticate using key A
       if (status != MFRC522::STATUS_OK) {
         return;
       }
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid)); // Authenticate using key B
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key4B, &(mfrc522.uid)); // Authenticate using key B
       if (status != MFRC522::STATUS_OK) {
         return;
       }
@@ -213,7 +213,7 @@ void loop() {
     }
 
 
-    else if (userInput=='f'){ // hotelNiveau2
+    else if (userInput=='f'){ // hotelNiveau2 Secteur 5
       byte sector = 2;
       byte blockAddr = 9;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -221,12 +221,12 @@ void loop() {
       byte buffer[18];
       byte size = sizeof(buffer);
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid)); // Authenticate using key A
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key5A, &(mfrc522.uid)); // Authenticate using key A
       if (status != MFRC522::STATUS_OK) {
         return;
       }
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid)); // Authenticate using key B
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key5B, &(mfrc522.uid)); // Authenticate using key B
       if (status != MFRC522::STATUS_OK) {
         return;
       }
@@ -243,7 +243,7 @@ void loop() {
     }
 
 
-    else if (userInput=='g'){ // hotelNiveau3
+    else if (userInput=='g'){ // hotelNiveau3 Secteur 6
       byte sector = 2;
       byte blockAddr = 9;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
@@ -251,12 +251,12 @@ void loop() {
       byte buffer[18];
       byte size = sizeof(buffer);
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key1A, &(mfrc522.uid)); // Authenticate using key A
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key6A, &(mfrc522.uid)); // Authenticate using key A
       if (status != MFRC522::STATUS_OK) {
         return;
       }
 
-      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key1B, &(mfrc522.uid)); // Authenticate using key B
+      status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key6B, &(mfrc522.uid)); // Authenticate using key B
       if (status != MFRC522::STATUS_OK) {
         return;
       }
@@ -273,15 +273,15 @@ void loop() {
     }
 
 
-    else if (userInput=='h'){ // distributeurNiveau1
+    else if (userInput=='h'){ // distributeurNiveau1 Secteur 7
     }
 
 
-    else if (userInput=='i'){ // distributeurNiveau2
+    else if (userInput=='i'){ // distributeurNiveau2 Secteur 8
     }
 
 
-    else if (userInput=='j'){ // distributeurNiveau3
+    else if (userInput=='j'){ // distributeurNiveau3 Secteur 9
     }
   }
 }
