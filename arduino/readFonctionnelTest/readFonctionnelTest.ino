@@ -320,10 +320,10 @@ void loop() {
 
       mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
     }
+  
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////Distributeur1 Coca///////////////////////////////////////////////////////////////
 
     else if (userInput=='h'){ // distributeurNiveau1 Secteur 7
       if ( ! mfrc522.PICC_IsNewCardPresent())
@@ -335,10 +335,92 @@ void loop() {
 
       // In this sample we use the second sector,
       // that is: sector #1, covering block #4 up to and including block #7
-      byte sector         = 7;
-      byte ValueBlock    = 28;
+      byte sector         = 2;
+      byte ValueBlock    = 8;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
-      int32_t itemPrice = 1; // Evian = 1€
+      int32_t itemPrice = 3; // Coca = 3€
+      MFRC522::StatusCode status;
+      byte buffer[18];
+      byte size = sizeof(buffer);
+      int32_t value;
+
+      // Authenticate using key A
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+      Serial.print("B"); //B pour before
+      Serial.print(value); Serial.println("€");
+
+      // Read the sector trailer as it is currently stored on the PICC
+      // Serial.println(F("Reading sector trailer..."));
+      status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Authenticate using key B
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
+      if (value>=0 && value>itemPrice){
+        Serial.print("P"); Serial.print(itemPrice); Serial.println("€");
+        status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        status = mfrc522.MIFARE_Transfer(ValueBlock);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        // Show the new value of ValueBlock
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+        // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
+        Serial.print("A"); Serial.print(value); Serial.println("€");
+        // Serial.print(", bloc "); Serial.print(ValueBlock);
+        Serial.println("Coca");
+        Serial.println();
+      }
+
+      else{
+        Serial.println("Solde insuffisant");
+        Serial.println();
+      }
+
+      // Dump the sector data
+      // Serial.println();
+      // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key7A, sector);
+      // Serial.println();
+
+      mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
+    }
+
+/////////////////////////////Distributeur1 Evian///////////////////////////////////////////////////////////////
+
+    else if (userInput=='i'){ // distributeurNiveau1 Secteur 7
+      if ( ! mfrc522.PICC_IsNewCardPresent())
+      return;
+
+      // Select one of the cards
+      if ( ! mfrc522.PICC_ReadCardSerial())
+          return;
+
+      // In this sample we use the second sector,
+      // that is: sector #1, covering block #4 up to and including block #7
+      byte sector         = 2;
+      byte ValueBlock    = 8;
+      byte trailerBlock   = ((sector + 1) * 4) - 1;
+      int32_t itemPrice = 1; // evian = 1€
       MFRC522::StatusCode status;
       byte buffer[18];
       byte size = sizeof(buffer);
@@ -387,7 +469,88 @@ void loop() {
         // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
         Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
         // Serial.print(", bloc "); Serial.print(ValueBlock);
-        Serial.println("Obtenu : Coca");
+        Serial.println("Obtenu : Evian");
+        Serial.println();
+      }
+
+      else{
+        Serial.println("Solde insuffisant");
+        Serial.println();
+      }
+
+      // Dump the sector data
+      // Serial.println();
+      // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key7A, sector);
+      // Serial.println();
+
+      mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
+    }
+
+/////////////////////////////Distributeur1 Sprite///////////////////////////////////////////////////////////////
+
+    else if (userInput=='j'){ // distributeurNiveau1 Secteur 7
+      if ( ! mfrc522.PICC_IsNewCardPresent())
+      return;
+
+      // Select one of the cards
+      if ( ! mfrc522.PICC_ReadCardSerial())
+          return;
+
+      // In this sample we use the second sector,
+      // that is: sector #1, covering block #4 up to and including block #7
+      byte sector         = 2;
+      byte ValueBlock    = 8;
+      byte trailerBlock   = ((sector + 1) * 4) - 1;
+      int32_t itemPrice = 2; // sprite = 2€
+      MFRC522::StatusCode status;
+      byte buffer[18];
+      byte size = sizeof(buffer);
+      int32_t value;
+
+      // Authenticate using key A
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+      Serial.print("Solde : "); Serial.print(value); Serial.println("€");
+
+      // Read the sector trailer as it is currently stored on the PICC
+      // Serial.println(F("Reading sector trailer..."));
+      status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Authenticate using key B
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
+      if (value>=0 && value>itemPrice){
+        Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
+        status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        status = mfrc522.MIFARE_Transfer(ValueBlock);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        // Show the new value of ValueBlock
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+        // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
+        Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
+        // Serial.print(", bloc "); Serial.print(ValueBlock);
+        Serial.println("Obtenu : Sprite");
         Serial.println();
       }
 
@@ -405,9 +568,91 @@ void loop() {
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////Distributeur1 Ice Tea///////////////////////////////////////////////////////////////
 
-    else if (userInput=='i'){ // distributeurNiveau2 Secteur 8
+    else if (userInput=='k'){ // distributeurNiveau1 Secteur 7
+      if ( ! mfrc522.PICC_IsNewCardPresent())
+      return;
+
+      // Select one of the cards
+      if ( ! mfrc522.PICC_ReadCardSerial())
+          return;
+
+      // In this sample we use the second sector,
+      // that is: sector #1, covering block #4 up to and including block #7
+      byte sector         = 2;
+      byte ValueBlock    = 8;
+      byte trailerBlock   = ((sector + 1) * 4) - 1;
+      int32_t itemPrice = 2; // Ice tea = 2€
+      MFRC522::StatusCode status;
+      byte buffer[18];
+      byte size = sizeof(buffer);
+      int32_t value;
+
+      // Authenticate using key A
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+      Serial.print("Solde : "); Serial.print(value); Serial.println("€");
+
+      // Read the sector trailer as it is currently stored on the PICC
+      // Serial.println(F("Reading sector trailer..."));
+      status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Authenticate using key B
+      status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid));
+      if (status != MFRC522::STATUS_OK) {
+          return;
+      }
+
+      // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
+      if (value>=0 && value>itemPrice){
+        Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
+        status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        status = mfrc522.MIFARE_Transfer(ValueBlock);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+
+        // Show the new value of ValueBlock
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        if (status != MFRC522::STATUS_OK) {
+            return;
+        }
+        // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
+        Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
+        // Serial.print(", bloc "); Serial.print(ValueBlock);
+        Serial.println("Obtenu : Ice tea");
+        Serial.println();
+      }
+
+      else{
+        Serial.println("Solde insuffisant");
+        Serial.println();
+      }
+
+      // Dump the sector data
+      // Serial.println();
+      // mfrc522.PICC_DumpMifareClassicSectorToSerial(&(mfrc522.uid), &key7A, sector);
+      // Serial.println();
+
+      mfrc522.PCD_StopCrypto1(); // Stop encryption on PCD
+    }
+
+
+////////////////////////////////Distributeur2////////////////////////////////////////////////////////////
+
+    else if (userInput=='l'){ // distributeurNiveau2 Secteur 8
       // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
         if ( ! mfrc522.PICC_IsNewCardPresent())
             return;
@@ -417,8 +662,8 @@ void loop() {
             return;
 
         // In this sample we use the second sector,
-        byte sector         = 8;
-        byte ValueBlock    = 32;
+        byte sector         = 2;
+        byte ValueBlock    = 8;
         byte trailerBlock   = ((sector + 1) * 4) - 1;
         int32_t itemPrice = 1; // Evian = 1€
         MFRC522::StatusCode status;
@@ -448,7 +693,7 @@ void loop() {
         // Decrement itemPrice from the value of ValueBlock and store the result in ValueBlock.
         if (value>=0 && value>itemPrice){
           Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-          Serial.println("Obtenu : Coca");
+          Serial.println("Obtenu : evian");
           Serial.print(F("Calcul du nouveau solde : ")); Serial.print(value-itemPrice); Serial.println("€");
           Serial.println();
 
@@ -488,9 +733,9 @@ void loop() {
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////Distributeur3 /////////////////////////////////////////////////////////////
 
-    else if (userInput=='j'){ // distributeurNiveau3 Secteur 9
+    else if (userInput=='m'){ // distributeurNiveau1 sprite
       // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
       if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
@@ -501,10 +746,10 @@ void loop() {
 
       // In this sample we use the second sector,
       // that is: sector #1, covering block #4 up to and including block #7
-      byte sector         = 9;
-      byte ValueBlock    = 36;
+      byte sector         = 2;
+      byte ValueBlock    = 8;
       byte trailerBlock   = ((sector + 1) * 4) - 1;
-      int32_t itemPrice = 1; // Evian = 1€
+      int32_t itemPrice = 2; // Sprite = 2€
       MFRC522::StatusCode status;
       byte buffer[18];
       byte size = sizeof(buffer);
@@ -546,7 +791,7 @@ void loop() {
             return;
         }
         Serial.print(F("Nouveau solde : ")); Serial.print(value); Serial.println("€");
-        Serial.println("Obtenu : Coca");
+        Serial.println("Obtenu : Sprite");
         Serial.println();
       }
 

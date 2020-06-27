@@ -34,9 +34,9 @@ void loop() {
 
     // In this sample we use the second sector,
     // that is: sector #1, covering block #4 up to and including block #7
-    byte sector         = 2;
-    byte ValueBlock    = 8;
-    byte trailerBlock   = 11;
+    byte sector         = 5;
+    byte ValueBlock    = 23;
+    byte trailerBlock   = 23;
     int32_t itemPrice = 1; // Evian = 1€
     MFRC522::StatusCode status;
     byte buffer[18];
@@ -68,7 +68,7 @@ void loop() {
     // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
     if (value>=0 && value>itemPrice){
       Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-      status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
+      //status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
       if (status != MFRC522::STATUS_OK) {
           return;
       }
