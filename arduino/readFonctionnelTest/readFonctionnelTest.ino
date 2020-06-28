@@ -352,7 +352,7 @@ void loop() {
 
       status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
       Serial.print("B"); //B pour before
-      Serial.print(value); Serial.println("€");
+      Serial.print(value); Serial.println("Y");
 
       // Read the sector trailer as it is currently stored on the PICC
       // Serial.println(F("Reading sector trailer..."));
@@ -369,7 +369,7 @@ void loop() {
 
       // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
       if (value>=0 && value>itemPrice){
-        Serial.print("P"); Serial.print(itemPrice); Serial.println("€");
+        Serial.print("P"); Serial.print(itemPrice); Serial.println("X");
         status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice);
         if (status != MFRC522::STATUS_OK) {
             return;
@@ -386,7 +386,7 @@ void loop() {
             return;
         }
         // status = mfrc522.MIFARE_SetValue(ValueBlock, 100);
-        Serial.print("A"); Serial.print(value); Serial.println("€");
+        Serial.print("A"); Serial.print(value); Serial.println("Z");
         // Serial.print(", bloc "); Serial.print(ValueBlock);
         Serial.println("Coca");
         Serial.println();
