@@ -56,7 +56,11 @@ void loop() {
 
     switch (userInput){
 
-      case 'a':  // porteNiveau1 Secteur 0
+////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////     Porte     //////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'a':  // porte Niveau 1 (Secteur 0)
       if ( ! mfrc522.PICC_IsNewCardPresent())
         return;
 
@@ -69,7 +73,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'b':  // porteNiveau2 Secteur 1
+      case 'b':  // porte Niveau 2 (Secteur 1)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -88,9 +92,6 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
           return;
 
-        /*
-        Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-        */
         status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 4 (Secteur 1)
         if (status != MFRC522::STATUS_OK)
           return;
@@ -102,7 +103,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'c': // porteNiveau3 Secteur 2
+      case 'c': // porte Niveau 3 (Secteur 2)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -121,9 +122,6 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
           return;
 
-        /*
-        Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-        */
         status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 8 (Secteur 2)
         if (status != MFRC522::STATUS_OK)
           return;
@@ -135,7 +133,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'd': // porteNiveau4 Secteur 3
+      case 'd': // porte Niveau 4 (Secteur 3)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -153,9 +151,7 @@ void loop() {
         status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key3B, &(mfrc522.uid)); // Authentification avec la clé B
         if (status != MFRC522::STATUS_OK)
           return;
-        /*
-        Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-        */
+
         status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 12 (Secteur 3)
         if (status != MFRC522::STATUS_OK)
           return;
@@ -166,8 +162,10 @@ void loop() {
         break;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////     Hôtel     //////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'e': // hotelNiveau1 Secteur 4
+      case 'e': // hôtel Niveau 1 (Secteur 4)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -198,7 +196,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'f': // hotelNiveau2 Secteur 5
+      case 'f': // hôtel Niveau 2 (Secteur 5)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -217,9 +215,6 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
           return;
 
-        /*
-        Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-        */
         status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 20 (Secteur 5)
         if (status != MFRC522::STATUS_OK)
           return;
@@ -231,7 +226,7 @@ void loop() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'g': // hotelNiveau3 Secteur 6
+      case 'g': // hôtel Niveau 3 (Secteur 6)
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
@@ -259,18 +254,20 @@ void loop() {
 
         break;
 
-/////////////////////////////Distributeur1 Coca///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////     Distributeur     //////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'h': // distributeurNiveau1 Secteur 7
+      case 'h': // distributeur Niveau 1 (Secteur 7) - Coca
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        sector         = 7;
-        ValueBlock    = 28;
-        trailerBlock   = ((sector + 1) * 4) - 1;
+        sector = 7;
+        ValueBlock = 28;
+        trailerBlock = ((sector + 1) * 4) - 1;
         itemPrice = 3; // Coca = 3€
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
@@ -278,10 +275,9 @@ void loop() {
             return;
 
         status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("B"); //B pour before
-        Serial.print(value); Serial.println("Y");
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
 
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 28 (Secteur 7)
         if (status != MFRC522::STATUS_OK)
             return;
 
@@ -290,7 +286,8 @@ void loop() {
             return;
 
         if (value>=0 && value>itemPrice){
-          Serial.print("P"); Serial.print(itemPrice); Serial.println("X");
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
@@ -303,65 +300,8 @@ void loop() {
           if (status != MFRC522::STATUS_OK)
               return;
 
-          Serial.print("A"); Serial.print(value); Serial.println("Z");
-          Serial.println("Coca");
-          Serial.println();
-        }
-
-        else{
-          Serial.println("Solde insuffisant");
-          Serial.println();
-        }
-
-        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
-
-        break;
-
-/////////////////////////////Distributeur1 Evian///////////////////////////////////////////////////////////////
-
-      case 'i': // distributeurNiveau1 Secteur 7
-        if ( ! mfrc522.PICC_IsNewCardPresent())
-          return;
-
-        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
-          return;
-
-        sector         = 2;
-        ValueBlock    = 8;
-        trailerBlock   = ((sector + 1) * 4) - 1;
-        itemPrice = 1; // evian = 1€
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("Solde : "); Serial.print(value); Serial.println("€");
-
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        if (value>=0 && value>itemPrice){
-          Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
-          Serial.println("Obtenu : Evian"); Serial.println();
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Coca"); Serial.println();
         }
 
         else{
@@ -372,168 +312,216 @@ void loop() {
 
         break;
 
-/////////////////////////////Distributeur1 Sprite///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'j': // distributeurNiveau1 Secteur 7
+      case 'i': // distributeur Niveau 1 (Secteur 7) - Evian
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        sector         = 2;
-        ValueBlock    = 8;
-        trailerBlock   = ((sector + 1) * 4) - 1;
-        itemPrice = 2; // Sprite = 2€noi
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("Solde : "); Serial.print(value); Serial.println("€");
-
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        if (value>=0 && value>itemPrice){
-          Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
-          Serial.println("Obtenu : Sprite");
-          Serial.println();
-        }
-
-        else{
-          Serial.println("Solde insuffisant");
-          Serial.println();
-        }
-
-        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
-
-        break;
-
-/////////////////////////////Distributeur1 Ice Tea///////////////////////////////////////////////////////////////
-
-      case 'k': // distributeurNiveau1 Secteur 7
-        if ( ! mfrc522.PICC_IsNewCardPresent())
-          return;
-
-        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
-          return;
-
-        sector         = 2;
-        ValueBlock    = 8;
-        trailerBlock   = ((sector + 1) * 4) - 1;
-        itemPrice = 2; // Ice tea = 2€
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("Solde : "); Serial.print(value); Serial.println("€");
-
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
-        if (status != MFRC522::STATUS_OK)
-            return;
-
-        if (value>=0 && value>itemPrice){
-          Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          Serial.print(F("Nouveau solde :")); Serial.print(value); Serial.println("€");
-          Serial.println("Obtenu : Ice tea");
-          Serial.println();
-        }
-
-        else{
-          Serial.println("Solde insuffisant");
-          Serial.println();
-        }
-
-        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
-
-        break;
-
-////////////////////////////////Distributeur2////////////////////////////////////////////////////////////
-
-      case 'l': // distributeurNiveau2 Secteur 8
-        if ( ! mfrc522.PICC_IsNewCardPresent())
-          return;
-
-        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
-          return;
-
-        sector         = 2;
-        ValueBlock    = 8;
-        trailerBlock   = ((sector + 1) * 4) - 1;
+        sector = 7;
+        ValueBlock = 28;
+        trailerBlock = ((sector + 1) * 4) - 1;
         itemPrice = 1; // Evian = 1€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 28 (Secteur 7)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Evian"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'j': // distributeur Niveau 1 (Secteur 7) - Sprite
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 7;
+        ValueBlock    = 28;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Sprite = 2€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 28 (Secteur 7)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Sprite"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'k': // distributeur Niveau 1 (Secteur 7) - Ice Tea
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 7;
+        ValueBlock    = 28;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Ice Tea = 2€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key7A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 28 (Secteur 7)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key7B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Ice Tea"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'l': // distributeur Niveau 2 (Secteur 8) - Coca
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 8;
+        ValueBlock    = 32;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 3; // Coca = 3 €
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
         if (status != MFRC522::STATUS_OK)
             return;
 
         status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("Solde : "); Serial.print(value); Serial.println("€");
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
 
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Read the sector trailer as it is currently stored on the PICC
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 32 (Secteur 8)
         if (status != MFRC522::STATUS_OK)
             return;
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key8B, &(mfrc522.uid)); // Authentification avec la clé B
-        if (status != MFRC522::STATUS_OK) {
+        if (status != MFRC522::STATUS_OK)
             return;
-        }
 
         if (value>=0 && value>itemPrice){
-          Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
-          Serial.println("Obtenu : evian");
-          Serial.print(F("Calcul du nouveau solde : ")); Serial.print(value-itemPrice); Serial.println("€");
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Coca");
           Serial.println();
 
           delay(200);
 
-          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Decrement itemPrice from the value of ValueBlock and store the result in ValueBlock.
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
 
           status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
-          Serial.print(F("Nouveau solde : ")); Serial.print(value); Serial.println("€");
           if (status != MFRC522::STATUS_OK)
               return;
         }
@@ -547,27 +535,191 @@ void loop() {
 
         break;
 
-///////////////////////////////Distributeur3 /////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
-      case 'm': // distributeurNiveau1 sprite
+      case 'm': // distributeur Niveau 2 (Secteur 8) - Evian
         if ( ! mfrc522.PICC_IsNewCardPresent())
           return;
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        sector         = 2;
-        ValueBlock    = 8;
+        sector         = 8;
+        ValueBlock    = 32;
         trailerBlock   = ((sector + 1) * 4) - 1;
-        itemPrice = 2; // Sprite = 2€
+        itemPrice = 1; // Evian = 1 €
 
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 32 (Secteur 8)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key8B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Evian");
+          Serial.println();
+
+          delay(200);
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+        }
+
+        else{
+          Serial.println("Solde insuffisant");
+          Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'n': // distributeur Niveau 2 (Secteur 8) - Sprite
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 8;
+        ValueBlock    = 32;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Sprite = 2 €
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 32 (Secteur 8)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key8B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Sprite");
+          Serial.println();
+
+          delay(200);
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+        }
+
+        else{
+          Serial.println("Solde insuffisant");
+          Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'o': // distributeur Niveau 2 (Secteur 8) - Ice Tea
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 8;
+        ValueBlock    = 32;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Ice Tea = 2 €
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // // Lis les données du bloc 32 (Secteur 8)
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key8B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Ice Tea");
+          Serial.println();
+
+          delay(200);
+
+          status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente itemPrice de ValueBlock et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+        }
+
+        else{
+          Serial.println("Solde insuffisant");
+          Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'p': // distributeur Niveau 3 (Secteur 9) - Coca
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 9;
+        ValueBlock    = 36;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 3; // Coca = 3€
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
         if (status != MFRC522::STATUS_OK)
             return;
 
         status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("Solde : "); Serial.print(value); Serial.println("€");
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
 
         status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
         if (status != MFRC522::STATUS_OK)
@@ -578,36 +730,192 @@ void loop() {
             return;
 
         if (value>=0 && value>itemPrice){
-          Serial.print("Achat boisson à "); Serial.print(itemPrice); Serial.println("€");
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
           delay(300);
-          status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Decrement 10 from the value of ValueBlock and store the result in ValueBlock.
+          status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
               return;
 
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Show the new value of ValueBlock
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
 
-          Serial.print(F("Nouveau solde : ")); Serial.print(value); Serial.println("€");
-          Serial.println("Obtenu : Sprite");
-          Serial.println();
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
+          Serial.println("Coca"); Serial.println();
         }
 
         else{
-          Serial.println("Solde insuffisant");
-          Serial.println();
+          Serial.println("Solde insuffisant"); Serial.println();
         }
 
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
 
         break;
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'q': // distributeur Niveau 3 (Secteur 9) - Evian
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 9;
+        ValueBlock    = 36;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 1; // Evian = 1€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          delay(300);
+          status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
+          Serial.println("Evian"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'r': // distributeur Niveau 3 (Secteur 9) - Sprite
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 9;
+        ValueBlock    = 36;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Sprite = 3€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          delay(300);
+          status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
+          Serial.println("Sprite"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 's': // distributeur Niveau 3 (Secteur 9) - Ice Tea
+        if ( ! mfrc522.PICC_IsNewCardPresent())
+          return;
+
+        if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
+          return;
+
+        sector         = 9;
+        ValueBlock    = 36;
+        trailerBlock   = ((sector + 1) * 4) - 1;
+        itemPrice = 2; // Ice Tea = 3€
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size);
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+        if (status != MFRC522::STATUS_OK)
+            return;
+
+        if (value>=0 && value>itemPrice){
+          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+          delay(300);
+          status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
+          Serial.println("Ice Tea"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
+        mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
+
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
       default:
 
         return;
-    }
-  }
-}
+    } // switch{}
+  } // if userInput>0{}
+} // main{}
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
