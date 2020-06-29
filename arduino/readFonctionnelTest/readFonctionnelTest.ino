@@ -918,7 +918,6 @@ void loop() {
     } // switch{}
   } // if userInput>0{}
 } // main{}
-///////////////////////////////////////////////////////////////////////////////
 
 /**
   Réalise un dump sous forme de valeurs hexadécimales vers le port série
