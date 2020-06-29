@@ -283,7 +283,7 @@ void loop() {
 
       case 'h': // distributeur Niveau 1 (Secteur 7) - Coca
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -341,7 +341,7 @@ void loop() {
 
       case 'i': // distributeur Niveau 1 (Secteur 7) - Evian
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -399,7 +399,7 @@ void loop() {
 
       case 'j': // distributeur Niveau 1 (Secteur 7) - Sprite
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -457,7 +457,7 @@ void loop() {
 
       case 'k': // distributeur Niveau 1 (Secteur 7) - Ice Tea
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -516,7 +516,7 @@ void loop() {
 
       case 'l': // distributeur Niveau 2 (Secteur 8) - Coca
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -573,7 +573,7 @@ void loop() {
 
       case 'm': // distributeur Niveau 2 (Secteur 8) - Evian
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -630,7 +630,7 @@ void loop() {
 
       case 'n': // distributeur Niveau 2 (Secteur 8) - Sprite
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -687,7 +687,7 @@ void loop() {
 
       case 'o': // distributeur Niveau 2 (Secteur 8) - Ice Tea
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -745,7 +745,7 @@ void loop() {
 
       case 'p': // distributeur Niveau 3 (Secteur 9) - Coca
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -799,7 +799,7 @@ void loop() {
 
       case 'q': // distributeur Niveau 3 (Secteur 9) - Evian
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -853,7 +853,7 @@ void loop() {
 
       case 'r': // distributeur Niveau 3 (Secteur 9) - Sprite
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
@@ -907,7 +907,7 @@ void loop() {
 
       case 's': // distributeur Niveau 3 (Secteur 9) - Ice Tea
         if ( ! mfrc522.PICC_IsNewCardPresent()){
-          Serial.print("Lacoste TN ou quoi le sang");
+          Serial.print("non");
           return;
         }
 
