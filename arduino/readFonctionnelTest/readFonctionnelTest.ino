@@ -481,6 +481,7 @@ void loop() {
         break;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'l': // distributeur Niveau 2 (Secteur 8) - Coca
         if ( ! mfrc522.PICC_IsNewCardPresent())
@@ -511,7 +512,7 @@ void loop() {
 
         if (value>=0 && value>itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Coca");
           Serial.println();
 
@@ -566,7 +567,7 @@ void loop() {
 
         if (value>=0 && value>itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Evian");
           Serial.println();
 
@@ -621,7 +622,7 @@ void loop() {
 
         if (value>=0 && value>itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Sprite");
           Serial.println();
 
@@ -676,7 +677,7 @@ void loop() {
 
         if (value>=0 && value>itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Ice Tea");
           Serial.println();
 
@@ -700,6 +701,7 @@ void loop() {
 
         break;
 
+////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'p': // distributeur Niveau 3 (Secteur 9) - Coca
