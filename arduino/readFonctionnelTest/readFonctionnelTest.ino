@@ -173,23 +173,46 @@ void loop() {
           return;
 
         sector = 4;
-        blockAddr = 16;
-        trailerBlock   = ((sector + 1) * 4) - 1;
+        ValueBlock = 16;
+        trailerBlock = ((sector + 1) * 4) - 1;
 
-        status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key4A, &(mfrc522.uid)); // Authentification avec la clé A
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key4A, &(mfrc522.uid)); // Authentification avec la clé A
         if (status != MFRC522::STATUS_OK)
-          return;
+            return;
 
-        status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key4B, &(mfrc522.uid)); // Authentification avec la clé B
+        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key4B, &(mfrc522.uid)); // Authentification avec la clé B
         if (status != MFRC522::STATUS_OK)
-          return;
+            return;
 
-        Serial.print(F("Lecture bloc ")); Serial.print(blockAddr); Serial.println(F(" : "));
-        status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 16 (Secteur 4)
+        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
+        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
+
+        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 16 (Secteur 4)
         if (status != MFRC522::STATUS_OK)
-          return;
+            return;
 
-        dump_byte_array(buffer, 16); Serial.println();
+
+        if (value>=1){
+          status = mfrc522.MIFARE_Decrement(ValueBlock, 1); // Décrémente ValueBlock de 1 et stocke le résultat dans ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
+          Serial.println("Suivant"); Serial.println();
+        }
+
+        else{
+          Serial.println("Solde insuffisant"); Serial.println();
+        }
+
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
 
         break;
@@ -234,46 +257,22 @@ void loop() {
           return;
 
         sector = 6;
-        ValueBlock = 24;
+        blockAddr = 24;
         trailerBlock = ((sector + 1) * 4) - 1;
 
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key6A, &(mfrc522.uid)); // Authentification avec la clé A
+        status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key6A, &(mfrc522.uid)); // Authentification avec la clé A
         if (status != MFRC522::STATUS_OK)
-            return;
+          return;
 
-        status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key6B, &(mfrc522.uid)); // Authentification avec la clé B
+        status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key6B, &(mfrc522.uid)); // Authentification avec la clé B
         if (status != MFRC522::STATUS_OK)
-            return;
+          return;
 
-        status = mfrc522.MIFARE_GetValue(ValueBlock, &value);
-        Serial.print("A"); Serial.print(value); Serial.println("B"); // Entre A et B : solde avant décrémentation
-
-        status = mfrc522.MIFARE_Read(trailerBlock, buffer, &size); // Lis les données du bloc 24 (Secteur 6)
+        status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size); // Lis les données du bloc 24 (Secteur 6)
         if (status != MFRC522::STATUS_OK)
-            return;
+          return;
 
-
-        if (value>=1){
-          status = mfrc522.MIFARE_Decrement(ValueBlock, 1); // Décrémente ValueBlock de 1 et stocke le résultat dans ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_Transfer(ValueBlock); // Transfère la nouvelle valeur de ValueBock sur la carte
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          status = mfrc522.MIFARE_GetValue(ValueBlock, &value); // Récupère la nouvelle valeur du ValueBlock
-          if (status != MFRC522::STATUS_OK)
-              return;
-
-          Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
-          Serial.println("Suivant"); Serial.println();
-        }
-
-        else{
-          Serial.println("Solde insuffisant"); Serial.println();
-        }
-
+        dump_byte_array(buffer, 16); Serial.println();
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
 
         break;
@@ -283,8 +282,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'h': // distributeur Niveau 1 (Secteur 7) - Coca
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -339,8 +340,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'i': // distributeur Niveau 1 (Secteur 7) - Evian
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -395,8 +398,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'j': // distributeur Niveau 1 (Secteur 7) - Sprite
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -451,8 +456,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'k': // distributeur Niveau 1 (Secteur 7) - Ice Tea
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -508,15 +515,17 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'l': // distributeur Niveau 2 (Secteur 8) - Coca
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        sector         = 8;
-        ValueBlock    = 32;
-        trailerBlock   = ((sector + 1) * 4) - 1;
+        sector = 8;
+        ValueBlock = 32;
+        trailerBlock = ((sector + 1) * 4) - 1;
         itemPrice = 3; // Coca = 3 €
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
@@ -563,15 +572,17 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'm': // distributeur Niveau 2 (Secteur 8) - Evian
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        sector         = 8;
-        ValueBlock    = 32;
-        trailerBlock   = ((sector + 1) * 4) - 1;
+        sector = 8;
+        ValueBlock = 32;
+        trailerBlock = ((sector + 1) * 4) - 1;
         itemPrice = 1; // Evian = 1 €
 
         status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key8A, &(mfrc522.uid)); // Authentification avec la clé A
@@ -618,8 +629,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'n': // distributeur Niveau 2 (Secteur 8) - Sprite
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -673,8 +686,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'o': // distributeur Niveau 2 (Secteur 8) - Ice Tea
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -729,8 +744,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'p': // distributeur Niveau 3 (Secteur 9) - Coca
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -781,8 +798,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'q': // distributeur Niveau 3 (Secteur 9) - Evian
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -833,8 +852,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 'r': // distributeur Niveau 3 (Secteur 9) - Sprite
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
@@ -885,8 +906,10 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
       case 's': // distributeur Niveau 3 (Secteur 9) - Ice Tea
-        if ( ! mfrc522.PICC_IsNewCardPresent())
+        if ( ! mfrc522.PICC_IsNewCardPresent()){
+          Serial.print("Lacoste TN ou quoi le sang");
           return;
+        }
 
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
