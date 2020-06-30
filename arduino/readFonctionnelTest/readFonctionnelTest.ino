@@ -310,9 +310,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>=itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-
+        if (value>=itemPrice){
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
@@ -368,9 +366,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>=itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-
+        if (value>=itemPrice){
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
@@ -426,9 +422,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>=itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-
+        if (value>=itemPrice){
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
@@ -484,9 +478,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
-
+        if (value>=itemPrice){
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
           if (status != MFRC522::STATUS_OK)
               return;
@@ -543,8 +535,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Coca");
           Serial.println();
@@ -600,11 +591,9 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
-          Serial.println("Evian");
-          Serial.println();
+          Serial.println("evian"); Serial.println();
 
           delay(200);
 
@@ -657,8 +646,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Sprite");
           Serial.println();
@@ -714,8 +702,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           Serial.print("E"); Serial.print(value-itemPrice); Serial.println("F"); // Entre E et F : solde calculé après décrémentation
           Serial.println("Ice Tea");
           Serial.println();
@@ -772,8 +759,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           delay(300);
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
@@ -826,8 +812,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           delay(300);
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
@@ -880,8 +865,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           delay(300);
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
@@ -934,8 +918,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
-          Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
+        if (value>=itemPrice){
           delay(300);
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
