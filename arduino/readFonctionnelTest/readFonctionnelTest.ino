@@ -310,7 +310,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
+        if (value>=0 && value>=itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
 
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
@@ -330,7 +330,7 @@ void loop() {
         }
 
         else{
-          Serial.println("Solde insuffisant"); Serial.println();
+          Serial.println("insuffisant"); Serial.println();
         }
 
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
@@ -368,7 +368,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
+        if (value>=0 && value>=itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
 
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
@@ -384,11 +384,11 @@ void loop() {
               return;
 
           Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après décrémentation
-          Serial.println("Evian"); Serial.println();
+          Serial.println("evian"); Serial.println();
         }
 
         else{
-          Serial.println("Solde insuffisant"); Serial.println();
+          Serial.println("insuffisant"); Serial.println();
         }
 
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
@@ -426,7 +426,7 @@ void loop() {
         if (status != MFRC522::STATUS_OK)
             return;
 
-        if (value>=0 && value>itemPrice){
+        if (value>=0 && value>=itemPrice){
           Serial.print("C"); Serial.print(itemPrice); Serial.println("D"); // Entre C et D : prix de l'objet
 
           status = mfrc522.MIFARE_Decrement(ValueBlock, itemPrice); // Décrémente ValueBlock de itemPrice et stocke le résultat dans ValueBlock
