@@ -1,4 +1,5 @@
 /**
+ * Ce programme est basé sur l'exemple ReadAndWrite.ino de la librairie MFRC522
  * ----------------------------------------------------------------------------
  * This is a MFRC522 library example; see https://github.com/miguelbalboa/rfid
  * for further details and other examples.
@@ -7,11 +8,6 @@
  *
  * Released into the public domain.
  * ----------------------------------------------------------------------------
- * This sample shows how to read and write data blocks on a MIFARE Classic PICC
- * (= card/tag).
- *
- * BEWARE: Data will be written to the PICC, in sector #1 (blocks #4 to #7).
- *
  *
  * Typical pin layout used:
  * -----------------------------------------------------------------------------------------
@@ -30,15 +26,31 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define RST_PIN         9           // Configurable, see typical pin layout above
-#define SS_PIN          10          // Configurable, see typical pin layout above
+#define RST_PIN         9
+#define SS_PIN          10
 
-MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Créé une instance de MFRC522
 
 #define NEW_UID {0x09, 0xCD, 0xF0, 0x5D}
 
 MFRC522::MIFARE_Key key = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
-// MFRC522::MIFARE_Key key0A = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}}; MFRC522::MIFARE_Key key0B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+
+MFRC522::MIFARE_Key key0A =   {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};  MFRC522::MIFARE_Key key0B = {keyByte: {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5}};
+MFRC522::MIFARE_Key key1A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key1B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key2A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key2B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key3A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key3B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key4A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key4B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key5A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key5B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key6A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key6B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key7A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key7B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key8A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key8B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key9A =   {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};  MFRC522::MIFARE_Key key9B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key10A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key10B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key11A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key11B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key12A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key12B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key13A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key13B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key14A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key14B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
+MFRC522::MIFARE_Key key15A =  {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}}; MFRC522::MIFARE_Key key15B = {keyByte: {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
 char userInput;
 
@@ -122,21 +134,17 @@ byte count = 0;
 int32_t value;
 
 /**
- * Initialize.
+ * Initialisation
  */
 void setup() {
-    Serial.begin(9600); // Initialize serial communications with the PC
-    while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-    SPI.begin();        // Init SPI bus
-    mfrc522.PCD_Init(); // Init MFRC522 card
-
-    Serial.println(F("Scan a MIFARE Classic PICC to demonstrate read and write.")); Serial.print(F("Using key (for A and B):"));
-    dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
-    Serial.println();
+    Serial.begin(9600); // Initialise les communications séries avec le PC
+    while (!Serial);   // Ne fais rien si aucun port série n'est ouvert
+    SPI.begin();        // Initialise le bus SPI
+    mfrc522.PCD_Init(); // Initialise la carte MFRC522
 }
 
 /**
- * Main loop.
+ *   Boucle principale
  */
 void loop() {
 

@@ -36,8 +36,8 @@ int32_t itemPrice;
 int32_t value;
 
 /**
-   Initialisation
-*/
+ * Initialisation
+ */
 void setup() {
   Serial.begin(9600); // Initialise les communications séries avec le PC
   while (!Serial);    // Ne fais rien si aucun port série n'est ouvert
@@ -46,8 +46,8 @@ void setup() {
 }
 
 /**
-   Boucle principale
-*/
+ * Boucle principale
+ */
 void loop() {
 
   if(Serial.available()>0){
@@ -951,7 +951,7 @@ void loop() {
         if ( ! mfrc522.PICC_ReadCardSerial()) // Sélectionne une carte
           return;
 
-        Serial.println("ok");
+        Serial.println("ok"); // Renvoie "ok" une fois si une carte est détectée
         break;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
