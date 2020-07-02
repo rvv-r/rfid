@@ -823,7 +823,7 @@ void loop() {
               return;
 
           Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
-          Serial.println("Evian"); Serial.println();
+          Serial.println("evian"); Serial.println();
         }
 
         else{
