@@ -814,6 +814,7 @@ void loop() {
 
         if (value>=itemPrice){
           delay(300);
+
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
               return;
@@ -938,6 +939,12 @@ void loop() {
 
         mfrc522.PCD_StopCrypto1(); // Arrête le chiffrement sur la carte
 
+        break;
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+      case 'v': // Pour hôtel Niveau 4
+        Serial.println("ok");
         break;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
