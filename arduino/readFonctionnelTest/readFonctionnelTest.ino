@@ -760,7 +760,22 @@ void loop() {
             return;
 
         if (value>=itemPrice){
-          delay(300);
+          mfrc522.PCD_StopCrypto1();
+          mfrc522.PICC_HaltA();
+          Serial.println("Halt");
+          delay(5000);
+
+          if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() )
+            return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+          if (status != MFRC522::STATUS_OK)
+              return;
+
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
               return;
@@ -813,7 +828,21 @@ void loop() {
             return;
 
         if (value>=itemPrice){
-          delay(300);
+          mfrc522.PCD_StopCrypto1();
+          mfrc522.PICC_HaltA();
+          Serial.println("Halt");
+          delay(5000);
+
+          if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() )
+            return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+          if (status != MFRC522::STATUS_OK)
+              return;
 
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
@@ -867,7 +896,22 @@ void loop() {
             return;
 
         if (value>=itemPrice){
-          delay(300);
+          mfrc522.PCD_StopCrypto1();
+          mfrc522.PICC_HaltA();
+          Serial.println("Halt");
+          delay(5000);
+
+          if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() )
+            return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+          if (status != MFRC522::STATUS_OK)
+              return;
+
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
               return;
@@ -920,7 +964,23 @@ void loop() {
             return;
 
         if (value>=itemPrice){
-          delay(300);
+
+          mfrc522.PCD_StopCrypto1();
+          mfrc522.PICC_HaltA();
+          Serial.println("Halt");
+          delay(5000);
+
+          if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() )
+            return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key9A, &(mfrc522.uid)); // Authentification avec la clé A
+          if (status != MFRC522::STATUS_OK)
+              return;
+
+          status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key9B, &(mfrc522.uid)); // Authentification avec la clé B
+          if (status != MFRC522::STATUS_OK)
+              return;
+
           status = mfrc522.MIFARE_SetValue(ValueBlock, value-itemPrice); // Définit le nouveau solde de la carte après un calcul local
           if (status != MFRC522::STATUS_OK)
               return;
@@ -931,7 +991,7 @@ void loop() {
 
           Serial.print("E"); Serial.print(value); Serial.println("F"); // Entre E et F : solde après achat
           Serial.println("Ice Tea"); Serial.println();
-        }
+          }
 
         else{
           Serial.println("Solde insuffisant"); Serial.println();
